@@ -93,7 +93,7 @@ export default function Animal() {
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
       console.log("ANIMAL", res.data);
-      return res.data[0];
+      return res.data;
     },
     { staleTime: 6000 }
   );
@@ -159,6 +159,8 @@ export default function Animal() {
   return (
     <Surface style={styles.container}>
       <QueryClientProvider client={queryClient}>
+        <Stack.Screen options={{ title: data.name }} />
+
         <Subheading style={styles.title}>{titulo1}</Subheading>
         <Subheading style={styles.title}>{titulo}</Subheading>
         <Divider style={{ backgroundColor: "gray", marginTop: 10 }} />
