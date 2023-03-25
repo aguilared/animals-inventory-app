@@ -73,37 +73,39 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function TabAnimalScreen() {
-  const colorScheme = useColorScheme();
-
-  const ENDPOINT = API_URL + "animals";
+  const OWNER = 6;
+  const ENDPOINT = API_URL + "animals/owners/" + OWNER;
   //console.log("ENDPOINT", ENDPOINT);
 
   const { status, data, error, isLoading, refetch } = useQuery(
-    ["animals"],
+    ["animalsApetra"],
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
-      //console.log("DATA1", res);
+      //console.log("DATA1", res.data);
       return res.data;
     },
     { staleTime: 6000 }
   );
+
   const { width } = useWindowDimensions();
   const innerWindow = width - 48;
   const dates: any = new Date();
   const titulo = "Inventarios Animals : " + convertDate(dates);
-  const titulo1 = "Gonzalera Ranch";
   const navigation = useNavigation();
-  //console.log("NAVIGATIOOON", navigation);
+  if (!data) {
+    return null;
+  }
+  const titulo1 = data.owner.name + ", Animals: " + data.count;
 
   return (
     <Surface style={styles.container}>
       <QueryClientProvider client={queryClient}>
-        <Subheading style={styles.title}>{titulo1}</Subheading>
         <Subheading style={styles.title}>{titulo}</Subheading>
+        <Subheading style={styles.title}>{titulo1}</Subheading>
         <Divider style={{ backgroundColor: "gray", marginTop: 10 }} />
 
         <FlashList
-          data={data}
+          data={data.result}
           renderItem={({ item }) => (
             <List.Section
               style={{
@@ -112,62 +114,6 @@ export default function TabAnimalScreen() {
                 marginRight: 5,
               }}
             >
-              <Appbar.Header style={styles.header}>
-                <Appbar.Content
-                  titleStyle={styles.header}
-                  title={`
-                  Id:${item.id}`}
-                />
-                <Appbar.Action
-                  icon="eye"
-                  onPress={() =>
-                    navigation.navigate("ModalAnimalView", {
-                      id: item.id,
-                      name: item.name,
-                      birthdate: item.birthdate,
-                      owner_id: item.owner_id,
-                      clase_id: item.clase_id,
-                      tipopart: item.tipopart,
-                      hierro: item.hierro,
-                      mother: item.mother,
-                      info: item.info,
-                      alive: item.alive,
-                      owner: item.owner.name,
-                      clase: item.clase.description,
-                    })
-                  }
-                />
-                <Appbar.Action
-                  icon="pencil"
-                  onPress={() =>
-                    navigation.navigate("ModalAnimalEdit", {
-                      id: item.id,
-                      name: item.name,
-                      clase_id: item.clase_id,
-                      mother: item.mother,
-                      owner_id: item.owner_id,
-                      owner: item.owner.name,
-                    })
-                  }
-                />
-                <Appbar.Action icon="delete" onPress={() => alert("Search")} />
-                <Appbar.Action
-                  icon="plus"
-                  onPress={() =>
-                    navigation.navigate("ModalBitaEventsAdd", {
-                      id: item.id,
-                      bitacora_id: item.bitacora_id,
-                      event_date: item.event_date,
-                      tipo_event_id: item.tipo_event_id,
-                      owner: item.events_id,
-                      event: item.event.description,
-                      tipoevent: item.tipoEvent.description,
-                      description: item.description,
-                    })
-                  }
-                />
-              </Appbar.Header>
-
               <Link
                 href={{
                   pathname: "/(app)/animal/[animal]",
@@ -179,31 +125,11 @@ export default function TabAnimalScreen() {
               >
                 <Text style={styles.linkText}>{`Animal Id: ${item.id}`}</Text>
               </Link>
-              <Link href="/(app)/animal/[animal]" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-              <Link
-                href={{
-                  pathname: "/(app)/animal/[animal]",
-                  params: {
-                    animal: item.id,
-                  },
-                }}
-              >
-                Go to user
-              </Link>
 
               <Text style={styles.title1}>{`Name: ${item.name}`}</Text>
-              <Text style={styles.title1}>{`Clase: ${item.clase_id}`}</Text>
+              <Text
+                style={styles.title1}
+              >{`Clase: ${item.clase_id} ${item.clase.description}`}</Text>
               <Text style={styles.title1}>{`Mother: ${item.mother}`}</Text>
               <Text style={styles.title1}>{`Owner: ${item.owner.name}`}</Text>
               <Text style={styles.title1}>{`Birthdate: ${convertDate(
@@ -336,11 +262,15 @@ const styles = StyleSheet.create({
     height: 240,
   },
   link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    marginTop: 1,
+    marginBottom: 1,
   },
   linkText: {
-    fontSize: 16,
     color: "#2e78b7",
+    marginTop: 1,
+    marginBottom: 1,
+    marginLeft: 1,
+    marginRight: 5,
+    fontSize: 17,
   },
 });

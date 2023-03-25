@@ -73,15 +73,15 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function TabAnimalScreen() {
-  const OWNER = 1;
+  const OWNER = 5;
   const ENDPOINT = API_URL + "animals/owners/" + OWNER;
   //console.log("ENDPOINT", ENDPOINT);
 
   const { status, data, error, isLoading, refetch } = useQuery(
-    ["animalsArqui"],
+    ["animalsCruz"],
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
-      console.log("DATA1", res.data);
+      //console.log("DATA1", res.data);
       return res.data;
     },
     { staleTime: 6000 }

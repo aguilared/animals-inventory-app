@@ -26,58 +26,54 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-          headerLeft: () => (
-            <Link
-              href={{
-                pathname: "/(app)/animal/[animal]",
-                params: {
-                  animal: 1,
-                },
-              }}
-              asChild
-            >
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="animals"
-        options={{
           title: "Animals",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="android" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="animalsA"
+        options={{
+          title: "Arqui",
+          tabBarIcon: ({ color }) => <TabBarIcon name="key" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="animalsJ"
+        options={{
+          title: "Jose",
+          tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="animalsAp"
+        options={{
+          title: "Angel",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="info-circle" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="animalsC"
+        options={{
+          title: "Cruz",
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="animalsP"
+        options={{
+          title: "Petra",
+          tabBarIcon: ({ color }) => <TabBarIcon name="link" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="animalsY"
+        options={{
+          title: "Yoel",
+          tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
         }}
       />
     </Tabs>
