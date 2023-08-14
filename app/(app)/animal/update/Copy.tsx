@@ -6,7 +6,6 @@ import {
   ScrollView,
 } from "react-native";
 import { Stack, useRouter, useSearchParams } from "expo-router";
-import { useForm, Controller } from "react-hook-form";
 
 import {
   Subheading,
@@ -16,7 +15,7 @@ import {
   Appbar,
   useTheme,
 } from "react-native-paper";
-import { Text, View } from "../../../components/Themed";
+import { Text, View } from "../../../../components/Themed";
 import HTMLView from "react-native-htmlview";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -90,10 +89,11 @@ export default function Animal() {
   console.log("ENDPOINT", ENDPOINT);
 
   const { status, data, error, isLoading, refetch } = useQuery(
-    ["animalx"],
+    ["animalUpdate"],
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
-      return res.data[0];
+      console.log("ANIMAL", res.data);
+      return res.data;
     },
     { staleTime: 6000 }
   );
@@ -107,7 +107,7 @@ export default function Animal() {
   //const { id, description } = clase;
   const obj = JSON.stringify(data);
   console.log("DATArOBJ", obj);
-  //setId(data.id);
+
   //const {
   //clase: { id },
   //} = data;
@@ -151,7 +151,7 @@ export default function Animal() {
   });
 
   const dates: any = new Date();
-  const titulo = "Animal al " + convertDate(dates);
+  const titulo = "Update Animal, " + convertDate(dates);
   const titulo1 = "Gonzalera Ranch";
   if (!data) {
     return null;

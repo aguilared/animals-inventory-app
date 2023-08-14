@@ -5,7 +5,6 @@ import {
   Image,
   useWindowDimensions,
   Pressable,
-  useColorScheme,
 } from "react-native";
 
 import { Link, Stack } from "expo-router";
@@ -37,6 +36,12 @@ import { FlashList } from "@shopify/flash-list";
 import Constants from "expo-constants";
 import { AppConfig } from "../../app.config";
 
+onlineManager.setEventListener((setOnline) => {
+  return NetInfo.addEventListener((state) => {
+    setOnline(!!state.isConnected);
+  });
+});
+
 const { API_TOKEN, API_URL, BASE_URL_IMAGES } = Constants.manifest
   ?.extra as AppConfig;
 
@@ -56,12 +61,6 @@ const convertDate = (date: string) => {
   return d;
 };
 
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
-    setOnline(state.isConnected);
-  });
-});
-
 function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== "web") {
     focusManager.setFocused(status === "active");
@@ -69,8 +68,6 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function TabAnimalScreen() {
-  const colorScheme = useColorScheme();
-
   const ENDPOINT = API_URL + "animals";
   //console.log("ENDPOINT", ENDPOINT);
 
@@ -83,6 +80,19 @@ export default function TabAnimalScreen() {
     },
     { staleTime: 6000 }
   );
+
+  const firstTimeRef = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (firstTimeRef.current) {
+        firstTimeRef.current = false;
+        return;
+      }
+
+      refetch();
+    }, [refetch])
+  );
+
   const { width } = useWindowDimensions();
   const innerWindow = width - 48;
   const dates: any = new Date();
@@ -112,38 +122,28 @@ export default function TabAnimalScreen() {
                   title={`
                   Id:${item.id}`}
                 />
-                <Appbar.Action
-                  icon="eye"
-                  onPress={() =>
-                    navigation.navigate("ModalAnimalView", {
-                      id: item.id,
-                      name: item.name,
-                      birthdate: item.birthdate,
-                      owner_id: item.owner_id,
-                      clase_id: item.clase_id,
-                      tipopart: item.tipopart,
-                      hierro: item.hierro,
-                      mother: item.mother,
-                      info: item.info,
-                      alive: item.alive,
-                      owner: item.owner.name,
-                      clase: item.clase.description,
-                    })
-                  }
-                />
-                <Appbar.Action
-                  icon="pencil"
-                  onPress={() =>
-                    navigation.navigate("ModalAnimalEdit", {
-                      id: item.id,
-                      name: item.name,
-                      clase_id: item.clase_id,
-                      mother: item.mother,
-                      owner_id: item.owner_id,
-                      owner: item.owner.name,
-                    })
-                  }
-                />
+                <Link
+                  href={{
+                    pathname: "/(app)/animal/update/modal",
+                    params: {
+                      animal: item.id,
+                    },
+                  }}
+                  style={styles.link}
+                >
+                  <Appbar.Action icon="eye" />
+                </Link>
+                <Link
+                  href={{
+                    pathname: "/(app)/animal/update/[animal]",
+                    params: {
+                      animal: item.id,
+                    },
+                  }}
+                  style={styles.link}
+                >
+                  <Appbar.Action icon="pencil" />
+                </Link>
                 <Appbar.Action icon="delete" onPress={() => alert("Search")} />
                 <Appbar.Action
                   icon="plus"
