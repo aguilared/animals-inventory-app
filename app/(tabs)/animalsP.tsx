@@ -75,13 +75,13 @@ function onAppStateChange(status: AppStateStatus) {
 export default function TabAnimalScreen() {
   const OWNER = 6;
   const ENDPOINT = API_URL + "animals/owners/" + OWNER;
-  //console.log("ENDPOINT", ENDPOINT);
+  console.log("ENDPOINT", ENDPOINT);
 
   const { status, data, error, isLoading, refetch } = useQuery(
-    ["animalsApetra"],
+    ["animalsPetra"],
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
-      //console.log("DATA1", res.data);
+      console.log("DATA1", res.data);
       return res.data;
     },
     { staleTime: 6000 }
@@ -91,11 +91,10 @@ export default function TabAnimalScreen() {
   const innerWindow = width - 48;
   const dates: any = new Date();
   const titulo = "Inventarios Animals : " + convertDate(dates);
-  const navigation = useNavigation();
   if (!data) {
     return null;
   }
-  const titulo1 = data.owner.name + ", Animals: " + data.count;
+  const titulo1 = data.name + ", Animals: " + data._count.animal;
 
   return (
     <Surface style={styles.container}>
@@ -105,7 +104,7 @@ export default function TabAnimalScreen() {
         <Divider style={{ backgroundColor: "gray", marginTop: 10 }} />
 
         <FlashList
-          data={data.result}
+          data={data.animal}
           renderItem={({ item }) => (
             <List.Section
               style={{
@@ -131,7 +130,9 @@ export default function TabAnimalScreen() {
                 style={styles.title1}
               >{`Clase: ${item.clase_id} ${item.clase.description}`}</Text>
               <Text style={styles.title1}>{`Mother: ${item.mother}`}</Text>
-              <Text style={styles.title1}>{`Owner: ${item.owner.name}`}</Text>
+              <Text
+                style={styles.title1}
+              >{`Owner: ${item.id} ${item.owner.name}`}</Text>
               <Text style={styles.title1}>{`Birthdate: ${convertDate(
                 item.birthdate
               )}`}</Text>

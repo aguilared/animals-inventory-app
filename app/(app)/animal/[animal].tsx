@@ -93,7 +93,7 @@ export default function Animal() {
     ["animalx"],
     async () => {
       const res = await axios.get(`${ENDPOINT}`);
-      return res.data[0];
+      return res.data;
     },
     { staleTime: 6000 }
   );
