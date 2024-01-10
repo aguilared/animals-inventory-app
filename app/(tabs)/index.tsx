@@ -97,7 +97,7 @@ export default function TabAnimalScreen() {
   const innerWindow = width - 48;
   const dates: any = new Date();
   const titulo = "Inventarios Animals : " + convertDate(dates);
-  const titulo1 = "Gonzalera Ranch";
+  const titulo1 = "Gonzalera Ranchh";
   const navigation = useNavigation();
   return (
     <Surface style={styles.container}>
